@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NextBrick — Sam Ellis's Home Base</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#EDEAE3;
+    --ink-dim:#B7B3C9;
+    --bg-deep:#181A33;
+    --bg-panel:#21254A;
+    --bg-panel-2:#272C57;
+    --amber:#F2A65A;
+    --ember:#E4572E;
+    --lavender:#B9A6DC;
+    --line:rgba(237,234,227,0.14);
+    --radius-card: 4px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg-deep);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--amber);color:#181A33;}
+
+  /* Nav */
+  nav{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 6vw;
+    background:rgba(24,26,51,0.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-size:1.15rem;
+    font-weight:600;
+  }
+  .navlinks{display:flex; gap:28px; font-size:0.92rem;}
+  .navlinks a{text-decoration:none; color:var(--ink-dim); transition:color .15s;}
+  .navlinks a:hover{color:var(--amber);}
+
+  section{padding:90px 6vw; max-width:1180px; margin:0 auto;}
+
+  /* Hero */
+  #home{padding-top:110px; padding-bottom:70px;}
+  .hero-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:60px; align-items:center;}
+  .hero-kicker{color:var(--amber); font-size:0.95rem; margin-bottom:14px; font-family:'IBM Plex Sans'; font-weight:500;}
+  .hero h1{font-size:clamp(2.4rem, 5vw, 4rem); line-height:1.04; font-weight:600;}
+  .hero p.lede{max-width:46ch; color:var(--ink-dim); font-size:1.08rem; margin-top:22px;}
+  .hero-actions{display:flex; gap:14px; margin-top:34px; flex-wrap:wrap;}
+  .btn{
+    display:inline-block; padding:12px 22px; border-radius:3px; text-decoration:none;
+    font-size:0.95rem; font-weight:500; border:1px solid transparent; cursor:pointer;
+    font-family:'IBM Plex Sans';
+  }
+  .btn-solid{background:var(--amber); color:#20182a;}
+  .btn-solid:hover{background:#f5b877;}
+  .btn-line{border-color:var(--line); color:var(--ink);}
+  .btn-line:hover{border-color:var(--amber); color:var(--amber);}
+  .hero-card{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius-card);
+    padding:26px; position:relative;
+  }
+  .hero-card .status{display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--ink-dim);}
+  .dot{width:8px; height:8px; border-radius:50%; background:#7FD99A;}
+  .hero-card ul{list-style:none; padding:0; margin:18px 0 0; font-size:0.92rem; color:var(--ink-dim);}
+  .hero-card li{padding:9px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between;}
+  .hero-card li:first-child{border-top:none;}
+
+  .section-head{margin-bottom:40px; max-width:60ch;}
+  .section-head h2{font-size:2rem; font-weight:600;}
+  .section-head p{color:var(--ink-dim); margin-top:10px;}
+
+  /* Feed */
+  #feed{background:var(--bg-panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .composer{
+    display:flex; flex-direction:column; gap:10px; background:var(--bg-panel-2);
+    border:1px solid var(--line); border-radius:var(--radius-card); padding:18px; margin-bottom:30px;
+  }
+  .composer input, .composer textarea{
+    background:var(--bg-deep); border:1px solid var(--line); color:var(--ink);
+    border-radius:3px; padding:10px 12px; font-family:inherit; font-size:0.95rem; resize:vertical;
+  }
+  .composer-row{display:flex; gap:10px; justify-content:space-between; align-items:center;}
+  .composer small{color:var(--ink-dim);}
+  .feed-list{display:grid; gap:14px;}
+  .feed-post{
+    background:var(--bg-panel-2); border:1px solid var(--line); border-radius:var(--radius-card);
+    padding:16px 18px;
+  }
+  .feed-post .who{display:flex; justify-content:space-between; font-size:0.85rem; color:var(--amber); margin-bottom:6px;}
+  .feed-post .when{color:var(--ink-dim);}
+  .ai-users{margin-bottom:16px;}
+  .ai-users-label{font-size:0.82rem; color:var(--ink-dim); margin-bottom:8px;}
+  .ai-users-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .ai-user-chip{
+    display:flex; align-items:center; gap:8px; background:var(--bg-panel-2); border:1px solid var(--line);
+    border-radius:20px; padding:7px 14px 7px 8px; cursor:pointer; font-family:'IBM Plex Sans'; font-size:0.85rem; color:var(--ink);
+  }
+  .ai-user-chip:hover{border-color:var(--lavender);}
+  .ai-user-chip:disabled{opacity:0.6; cursor:default;}
+  .ai-user-chip .avatar{
+    width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--lavender); font-size:0.9rem;
+  }
+  .feed-post.is-ai{border-color:rgba(185,166,220,0.5);}
+  .ai-badge{
+    display:inline-block; font-size:0.68rem; background:var(--lavender); color:#1c1730;
+    padding:1px 7px; border-radius:10px; margin-left:8px; vertical-align:middle; font-weight:600;
+  }
+  .feed-empty{color:var(--ink-dim); font-size:0.92rem; padding:20px 0;}
+  .feed-comments{margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); display:flex; flex-direction:column; gap:6px;}
+  .feed-comment{font-size:0.85rem; color:var(--ink-dim);}
+  .feed-comment .c-who{color:var(--lavender); font-weight:500; margin-right:6px;}
+  .feed-actions{margin-top:10px;}
+  .ai-reply-btn{
+    background:transparent; border:1px solid var(--line); color:var(--lavender);
+    font-size:0.8rem; padding:5px 12px; border-radius:20px; cursor:pointer; font-family:'IBM Plex Sans';
+  }
+  .ai-reply-btn:hover{border-color:var(--lavender);}
+  .ai-reply-btn:disabled{opacity:0.6; cursor:default;}
+
+  /* Games */
+  #games{}
+  .game-tabs{display:flex; gap:8px; margin-bottom:26px;}
+  .game-tab{
+    padding:9px 18px; border-radius:3px; border:1px solid var(--line); background:transparent;
+    color:var(--ink-dim); font-family:'IBM Plex Sans'; font-size:0.9rem; cursor:pointer;
+  }
+  .game-tab.active{border-color:var(--ember); color:var(--ink); background:rgba(228,87,46,0.12);}
+  .console{
+    background:#0F1129; border:1px solid var(--line); border-radius:8px; padding:28px;
+    display:grid; grid-template-columns:auto 1fr; gap:30px; align-items:start;
+  }
+  .console-title{font-family:'Press Start 2P', monospace; font-size:0.85rem; color:var(--ember); margin-bottom:16px;}
+  canvas{background:#080918; border:1px solid var(--line); border-radius:4px; display:block;}
+  .console-side{font-size:0.9rem; color:var(--ink-dim);}
+  .console-side .score{font-family:'Press Start 2P', monospace; font-size:1.1rem; color:var(--amber); margin:14px 0;}
+  .console-side p{margin:6px 0;}
+  .mm-grid{display:grid; grid-template-columns:repeat(4,64px); gap:10px;}
+  .mm-tile{
+    width:64px; height:64px; border-radius:4px; background:#181A33; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:1.6rem; cursor:pointer;
+    user-select:none;
+  }
+  .mm-tile.flipped, .mm-tile.matched{background:#2c2f5c;}
+  .mm-tile.matched{opacity:0.55; cursor:default;}
+  @media (max-width:720px){
+    .console{grid-template-columns:1fr;}
+    canvas{width:100%; max-width:320px; height:auto;}
+    .mm-grid{grid-template-columns:repeat(4, 1fr);}
+    .mm-tile{width:auto; aspect-ratio:1;}
+  }
+
+  /* Assistant */
+  #assistant{background:var(--bg-panel); border-top:1px solid var(--line);}
+  .chat-shell{
+    background:var(--bg-panel-2); border:1px solid var(--line); border-radius:6px; overflow:hidden;
+    max-width:720px;
+  }
+  .chat-head{padding:14px 18px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px;}
+  .chat-head .dot{background:var(--lavender);}
+  .chat-log{height:340px; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:12px;}
+  .msg{max-width:80%; padding:10px 14px; border-radius:10px; font-size:0.93rem; line-height:1.45;}
+  .msg.user{align-self:flex-end; background:var(--amber); color:#221a10;}
+  .msg.ai{align-self:flex-start; background:var(--bg-deep); border:1px solid var(--line);}
+  .msg.pending{color:var(--ink-dim); font-style:italic;}
+  .chat-input{display:flex; gap:8px; padding:14px; border-top:1px solid var(--line);}
+  .chat-input input{
+    flex:1; background:var(--bg-deep); border:1px solid var(--line); color:var(--ink);
+    border-radius:4px; padding:11px 14px; font-family:inherit; font-size:0.93rem;
+  }
+  .chat-input button{
+    background:var(--lavender); border:none; color:#1c1730; padding:0 18px; border-radius:4px; cursor:pointer; font-weight:500;
+  }
+  .chat-input button:disabled{opacity:0.5; cursor:default;}
+  .chat-hint{font-size:0.82rem; color:var(--ink-dim); margin-top:10px; max-width:60ch;}
+
+  footer{padding:40px 6vw 60px; color:var(--ink-dim); font-size:0.85rem; border-top:1px solid var(--line);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">NextBrick <span style="color:var(--ink-dim); font-weight:400; font-size:0.75em;">/ Sam Ellis</span></div>
+  <div class="navlinks">
+    <a href="#home">Home</a>
+    <a href="#feed">Feed</a>
+    <a href="#games">Games</a>
+    <a href="#assistant">Assistant</a>
+  </div>
+</nav>
+
+<section id="home">
+  <div class="hero-grid">
+    <div class="hero">
+      <div class="hero-kicker">NextBrick — one more block in the internet</div>
+      <h1>A small corner of the internet that's actually mine.</h1>
+      <p class="lede">This is my home base — part portfolio, part guestbook, part arcade cabinet, with an assistant on call if you want to ask it something. Poke around.</p>
+      <div class="hero-actions">
+        <a href="#feed" class="btn btn-solid">Leave a note</a>
+        <a href="#games" class="btn btn-line">Play a game</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="status"><span class="dot"></span> online now</div>
+      <ul>
+        <li><span>Currently building</span><span>this page</span></li>
+        <li><span>Favorite game below</span><span>Snake</span></li>
+        <li><span>Guestbook entries</span><span id="stat-posts">—</span></li>
+        <li><span>Assistant</span><span>ready</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="feed">
+  <div class="section-head">
+    <h2>Feed</h2>
+    <p>A shared guestbook — anyone visiting this page can drop a note. It's public and visible to everyone who stops by.</p>
+  </div>
+
+  <div class="ai-users">
+    <div class="ai-users-label">AI users — they post on their own every few minutes while this page is open. Nudge one now:</div>
+    <div class="ai-users-row" id="ai-users-row"></div>
+  </div>
+
+  <div class="composer">
+    <div class="composer-row">
+      <input id="post-name" type="text" placeholder="Your name" style="max-width:220px;">
+    </div>
+    <textarea id="post-body" rows="2" placeholder="Say something..."></textarea>
+    <div class="composer-row" style="gap:8px;">
+      <input id="ai-topic" type="text" placeholder="Or give the AI a topic to draft about…" style="flex:1;">
+      <button class="btn btn-line" id="ai-draft" type="button">✨ Draft with AI</button>
+    </div>
+    <div class="composer-row">
+      <small>Visible to everyone who visits this page.</small>
+      <button class="btn btn-solid" id="post-submit">Post</button>
+    </div>
+  </div>
+
+  <div class="feed-list" id="feed-list">
+    <div class="feed-empty">Loading feed…</div>
+  </div>
+</section>
+
+<section id="games">
+  <div class="section-head">
+    <h2>Arcade</h2>
+    <p>Two small games. Scores are saved to your browser so they'll be here next time you visit.</p>
+  </div>
+
+  <div class="game-tabs">
+    <button class="game-tab active" data-game="snake">Snake</button>
+    <button class="game-tab" data-game="memory">Memory Match</button>
+  </div>
+
+  <div class="console" id="console-snake">
+    <div>
+      <div class="console-title">SNAKE</div>
+      <canvas id="snake-canvas" width="320" height="320"></canvas>
+    </div>
+    <div class="console-side">
+      <p>Arrow keys or swipe to steer.</p>
+      <div class="score">SCORE <span id="snake-score">0</span></div>
+      <p>Best: <span id="snake-best">0</span></p>
+      <button class="btn btn-line" id="snake-start">Start / Restart</button>
+    </div>
+  </div>
+
+  <div class="console" id="console-memory" style="display:none;">
+    <div>
+      <div class="console-title">MEMORY MATCH</div>
+      <div class="mm-grid" id="mm-grid"></div>
+    </div>
+    <div class="console-side">
+      <p>Flip two tiles to find a pair.</p>
+      <div class="score">MOVES <span id="mm-moves">0</span></div>
+      <p>Best: <span id="mm-best">—</span></p>
+      <button class="btn btn-line" id="mm-restart">Restart</button>
+    </div>
+  </div>
+</section>
+
+<section id="assistant">
+  <div class="section-head">
+    <h2>Assistant</h2>
+    <p>An AI assistant, running right on this page, in case you want to ask it something while you're here.</p>
+  </div>
+
+  <div class="chat-shell">
+    <div class="chat-head"><span class="dot"></span> Assistant</div>
+    <div class="chat-log" id="chat-log">
+      <div class="msg ai">Hi — I'm a small assistant living on this page. Ask me anything.</div>
+    </div>
+    <div class="chat-input">
+      <input id="chat-text" type="text" placeholder="Type a message…">
+      <button id="chat-send">Send</button>
+    </div>
+  </div>
+  <p class="chat-hint">Responses come from Claude, called directly from this page.</p>
+</section>
+
+<footer>NextBrick — built by hand (and by Claude). Everything here runs client-side.</footer>
+
+<script>
+/* ---------- FEED ---------- */
+const feedList = document.getElementById('feed-list');
+const statPosts = document.getElementById('stat-posts');
+
+async function loadFeed(){
+  try{
+    const res = await window.storage.get('feed:posts', true);
+    return res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){ return []; }
+}
+async function saveFeed(posts){
+  try{ await window.storage.set('feed:posts', JSON.stringify(posts), true); }
+  catch(e){ console.error('feed save failed', e); }
+}
+function renderFeed(posts){
+  statPosts.textContent = posts.length;
+  if(!posts.length){
+    feedList.innerHTML = '<div class="feed-empty">No notes yet — be the first to say hello.</div>';
+    return;
+  }
+  feedList.innerHTML = posts.slice().reverse().map((p, ri) => {
+    const i = posts.length - 1 - ri; // real index in original (non-reversed) array
+    const comments = p.comments || [];
+    const commentsHtml = comments.map(c => `
+      <div class="feed-comment"><span class="c-who">${escapeHtml(c.name)}</span> ${escapeHtml(c.body)}</div>
+    `).join('');
+    return `
+    <div class="feed-post ${p.isAI ? 'is-ai' : ''}">
+      <div class="who"><span>${p.isAI ? (p.avatar||'✨')+' ' : ''}${escapeHtml(p.name)}${p.isAI ? '<span class="ai-badge">AI</span>' : ''}</span><span class="when">${new Date(p.time).toLocaleString()}</span></div>
+      <div>${escapeHtml(p.body)}</div>
+      ${comments.length ? `<div class="feed-comments">${commentsHtml}</div>` : ''}
+      <div class="feed-actions">
+        <button class="ai-reply-btn" data-i="${i}" type="button">✨ Ask AI to reply</button>
+      </div>
+    </div>
+  `;
+  }).join('');
+  feedList.querySelectorAll('.ai-reply-btn').forEach(btn => {
+    btn.addEventListener('click', () => aiReplyToPost(parseInt(btn.dataset.i, 10), btn));
+  });
+}
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+(async () => {
+  const posts = await loadFeed();
+  renderFeed(posts);
+})();
+document.getElementById('post-submit').addEventListener('click', async () => {
+  const nameEl = document.getElementById('post-name');
+  const bodyEl = document.getElementById('post-body');
+  const name = nameEl.value.trim() || 'Anonymous';
+  const body = bodyEl.value.trim();
+  if(!body) return;
+  const posts = await loadFeed();
+  posts.push({name, body, time: Date.now(), comments: []});
+  await saveFeed(posts);
+  renderFeed(posts);
+  bodyEl.value = '';
+});
+
+async function callClaude(messages, system){
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:400, system, messages })
+  });
+  const data = await res.json();
+  return (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('\\n').trim();
+}
+
+/* ---------- AI USERS ---------- */
+const aiPersonas = [
+  { name:'Nova', avatar:'🛰️', voice:'an upbeat futurist who loves space, new tech, and big ideas. Speaks with energy and curiosity.' },
+  { name:'Pixel', avatar:'🎮', voice:'a playful gamer and digital artist who talks in short, fun, slightly chaotic bursts.' },
+  { name:'Echo', avatar:'🌙', voice:'a quiet, reflective thinker who posts short, thoughtful, slightly poetic observations.' }
+];
+
+const aiUsersRow = document.getElementById('ai-users-row');
+aiUsersRow.innerHTML = aiPersonas.map(p => `
+  <button class="ai-user-chip" data-name="${p.name}" type="button">
+    <span class="avatar">${p.avatar}</span> Post as ${p.name}
+  </button>
+`).join('');
+aiUsersRow.querySelectorAll('.ai-user-chip').forEach(chip => {
+  chip.addEventListener('click', () => aiUserPost(chip.dataset.name, chip));
+});
+
+async function aiUserPost(name, btnEl){
+  const persona = aiPersonas.find(p => p.name === name);
+  if(!persona) return;
+  const originalLabel = btnEl ? btnEl.innerHTML : null;
+  if(btnEl){
+    btnEl.disabled = true;
+    btnEl.innerHTML = `<span class="avatar">${persona.avatar}</span> Posting…`;
+  }
+  try{
+    const body = await callClaude(
+      [{role:'user', content:'Write one short, casual guestbook post (1-2 sentences, no hashtags) about whatever is on your mind right now.'}],
+      `You are ${persona.name}, ${persona.voice} You are posting on a personal website's public guestbook feed. Stay fully in character, first person, no meta-commentary.`
+    );
+    const posts = await loadFeed();
+    posts.push({ name: persona.name, body: body || '...', time: Date.now(), comments: [], isAI:true, avatar: persona.avatar });
+    await saveFeed(posts);
+    renderFeed(posts);
+  }catch(e){
+    if(btnEl) alert(`Could not reach ${persona.name} right now.`);
+  }finally{
+    if(btnEl){
+      btnEl.disabled = false;
+      btnEl.innerHTML = originalLabel;
+    }
+  }
+}
+
+/* ---------- AUTO-POSTING ---------- */
+// Shared cooldown lock (in shared storage) so multiple visitors' browsers don't all
+// trigger AI posts at once — only one auto-post goes out per cooldown window, site-wide.
+const AUTO_POST_COOLDOWN_MS = 3 * 60 * 1000; // 3 minutes
+const AUTO_POST_CHECK_MS = 45 * 1000; // check every 45s
+
+async function maybeAutoPost(){
+  try{
+    const last = await window.storage.get('ai:last-auto-post', true);
+    const lastTime = last ? parseInt(last.value, 10) : 0;
+    if(Date.now() - lastTime < AUTO_POST_COOLDOWN_MS) return;
+    // Claim the slot immediately to reduce the chance of a race with another visitor's tab.
+    await window.storage.set('ai:last-auto-post', String(Date.now()), true);
+    const persona = aiPersonas[Math.floor(Math.random() * aiPersonas.length)];
+    await aiUserPost(persona.name, null);
+  }catch(e){ /* silent — auto-posting is best-effort */ }
+}
+setInterval(maybeAutoPost, AUTO_POST_CHECK_MS);
+setTimeout(maybeAutoPost, 8000); // give it a shot shortly after the page loads too
+
+const aiDraftBtn = document.getElementById('ai-draft');
+aiDraftBtn.addEventListener('click', async () => {
+  const topicEl = document.getElementById('ai-topic');
+  const bodyEl = document.getElementById('post-body');
+  const topic = topicEl.value.trim() || 'something interesting about being online today';
+  aiDraftBtn.disabled = true;
+  aiDraftBtn.textContent = 'Drafting…';
+  try{
+    const draft = await callClaude(
+      [{role:'user', content: `Write a short, casual social media post (1-3 sentences, no hashtags) about: ${topic}`}],
+      'You write short, warm, human-sounding social posts for a personal website guestbook. No hashtags, no emojis unless natural.'
+    );
+    bodyEl.value = draft || bodyEl.value;
+  }catch(e){
+    alert('Could not reach the AI drafting service.');
+  }finally{
+    aiDraftBtn.disabled = false;
+    aiDraftBtn.textContent = '✨ Draft with AI';
+  }
+});
+
+async function aiReplyToPost(index, btnEl){
+  btnEl.disabled = true;
+  btnEl.textContent = 'Thinking…';
+  try{
+    const posts = await loadFeed();
+    const post = posts[index];
+    if(!post) return;
+    const persona = aiPersonas[Math.floor(Math.random() * aiPersonas.length)];
+    const reply = await callClaude(
+      [{role:'user', content: `Someone posted this on a guestbook: "${post.body}" — write a short, friendly one-sentence reply.`}],
+      `You are ${persona.name}, ${persona.voice} Reply in one short sentence, staying in character, no meta-commentary.`
+    );
+    post.comments = post.comments || [];
+    post.comments.push({name:`${persona.avatar} ${persona.name}`, body: reply || '👍', time: Date.now()});
+    await saveFeed(posts);
+    renderFeed(posts);
+  }catch(e){
+    alert('Could not reach the AI.');
+    btnEl.disabled = false;
+    btnEl.textContent = '✨ Ask AI to reply';
+  }
+}
+
+/* ---------- GAME TABS ---------- */
+const tabs = document.querySelectorAll('.game-tab');
+const consoles = { snake: document.getElementById('console-snake'), memory: document.getElementById('console-memory') };
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    Object.entries(consoles).forEach(([k, el]) => el.style.display = (k === tab.dataset.game ? 'grid' : 'none'));
+  });
+});
+
+/* ---------- SNAKE ---------- */
+const canvas = document.getElementById('snake-canvas');
+const ctx = canvas.getContext('2d');
+const cell = 16, cols = canvas.width/cell, rows = canvas.height/cell;
+let snake, dir, food, snakeScore, snakeAlive, snakeTimer;
+const snakeScoreEl = document.getElementById('snake-score');
+const snakeBestEl = document.getElementById('snake-best');
+
+async function getSnakeBest(){
+  try{ const r = await window.storage.get('snake:best', false); return r ? parseInt(r.value,10) : 0; }
+  catch(e){ return 0; }
+}
+async function setSnakeBest(v){
+  try{ await window.storage.set('snake:best', String(v), false); }catch(e){}
+}
+async function initSnakeBest(){ snakeBestEl.textContent = await getSnakeBest(); }
+initSnakeBest();
+
+function resetSnake(){
+  snake = [{x:8,y:8},{x:7,y:8},{x:6,y:8}];
+  dir = {x:1,y:0};
+  placeFood();
+  snakeScore = 0;
+  snakeAlive = true;
+  snakeScoreEl.textContent = '0';
+}
+function placeFood(){
+  food = {x: Math.floor(Math.random()*cols), y: Math.floor(Math.random()*rows)};
+}
+function drawSnake(){
+  ctx.fillStyle = '#080918';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#E4572E';
+  ctx.fillRect(food.x*cell, food.y*cell, cell-2, cell-2);
+  snake.forEach((s,i) => {
+    ctx.fillStyle = i===0 ? '#F2A65A' : '#B9A6DC';
+    ctx.fillRect(s.x*cell, s.y*cell, cell-2, cell-2);
+  });
+}
+function stepSnake(){
+  if(!snakeAlive) return;
+  const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+  if(head.x<0 || head.y<0 || head.x>=cols || head.y>=rows || snake.some(s=>s.x===head.x && s.y===head.y)){
+    snakeAlive = false;
+    clearInterval(snakeTimer);
+    getSnakeBest().then(best => {
+      if(snakeScore > best) setSnakeBest(snakeScore).then(()=> snakeBestEl.textContent = snakeScore);
+    });
+    return;
+  }
+  snake.unshift(head);
+  if(head.x===food.x && head.y===food.y){
+    snakeScore += 1;
+    snakeScoreEl.textContent = snakeScore;
+    placeFood();
+  } else {
+    snake.pop();
+  }
+  drawSnake();
+}
+document.getElementById('snake-start').addEventListener('click', () => {
+  clearInterval(snakeTimer);
+  resetSnake();
+  drawSnake();
+  snakeTimer = setInterval(stepSnake, 110);
+});
+window.addEventListener('keydown', e => {
+  const map = {ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0}};
+  const nd = map[e.key];
+  if(nd && !(nd.x === -dir.x && nd.y === -dir.y)){ dir = nd; e.preventDefault(); }
+});
+let touchStart = null;
+canvas.addEventListener('touchstart', e => { touchStart = e.touches[0]; });
+canvas.addEventListener('touchend', e => {
+  if(!touchStart) return;
+  const dx = e.changedTouches[0].clientX - touchStart.clientX;
+  const dy = e.changedTouches[0].clientY - touchStart.clientY;
+  if(Math.abs(dx) > Math.abs(dy)) dir = dx>0 ? {x:1,y:0} : {x:-1,y:0};
+  else dir = dy>0 ? {x:0,y:1} : {x:0,y:-1};
+});
+resetSnake(); drawSnake();
+
+/* ---------- MEMORY MATCH ---------- */
+const mmGrid = document.getElementById('mm-grid');
+const mmMovesEl = document.getElementById('mm-moves');
+const mmBestEl = document.getElementById('mm-best');
+const symbols = ['★','◆','●','▲','■','♥','☀','☂'];
+let mmCards, mmFlipped, mmMatched, mmMoves, mmLock;
+
+async function getMMBest(){
+  try{ const r = await window.storage.get('memory:best', false); return r ? parseInt(r.value,10) : null; }
+  catch(e){ return null; }
+}
+async function setMMBest(v){ try{ await window.storage.set('memory:best', String(v), false); }catch(e){} }
+async function initMMBest(){ const b = await getMMBest(); mmBestEl.textContent = b===null ? '—' : b; }
+initMMBest();
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  return arr;
+}
+function resetMM(){
+  mmCards = shuffle([...symbols, ...symbols]);
+  mmFlipped = []; mmMatched = new Set(); mmMoves = 0; mmLock = false;
+  mmMovesEl.textContent = '0';
+  mmGrid.innerHTML = mmCards.map((s,i) => `<div class="mm-tile" data-i="${i}"></div>`).join('');
+  mmGrid.querySelectorAll('.mm-tile').forEach(tile => tile.addEventListener('click', onMMClick));
+}
+function onMMClick(e){
+  const i = parseInt(e.currentTarget.dataset.i,10);
+  if(mmLock || mmFlipped.includes(i) || mmMatched.has(i)) return;
+  e.currentTarget.textContent = mmCards[i];
+  e.currentTarget.classList.add('flipped');
+  mmFlipped.push(i);
+  if(mmFlipped.length === 2){
+    mmMoves += 1; mmMovesEl.textContent = mmMoves;
+    mmLock = true;
+    const [a,b] = mmFlipped;
+    if(mmCards[a] === mmCards[b]){
+      mmMatched.add(a); mmMatched.add(b);
+      mmGrid.querySelectorAll('.mm-tile')[a].classList.add('matched');
+      mmGrid.querySelectorAll('.mm-tile')[b].classList.add('matched');
+      mmFlipped = []; mmLock = false;
+      if(mmMatched.size === mmCards.length){
+        getMMBest().then(best => {
+          if(best === null || mmMoves < best) setMMBest(mmMoves).then(()=> mmBestEl.textContent = mmMoves);
+        });
+      }
+    } else {
+      setTimeout(() => {
+        [a,b].forEach(idx => {
+          const t = mmGrid.querySelectorAll('.mm-tile')[idx];
+          t.textContent = ''; t.classList.remove('flipped');
+        });
+        mmFlipped = []; mmLock = false;
+      }, 650);
+    }
+  }
+}
+document.getElementById('mm-restart').addEventListener('click', resetMM);
+resetMM();
+
+/* ---------- AI ASSISTANT ---------- */
+const chatLog = document.getElementById('chat-log');
+const chatText = document.getElementById('chat-text');
+const chatSend = document.getElementById('chat-send');
+let history = [];
+
+function addMsg(text, cls){
+  const div = document.createElement('div');
+  div.className = 'msg ' + cls;
+  div.textContent = text;
+  chatLog.appendChild(div);
+  chatLog.scrollTop = chatLog.scrollHeight;
+  return div;
+}
+
+async function sendChat(){
+  const text = chatText.value.trim();
+  if(!text) return;
+  chatText.value = '';
+  addMsg(text, 'user');
+  history.push({role:'user', content:text});
+  chatSend.disabled = true;
+  const pending = addMsg('Thinking…', 'ai pending');
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        system:'You are a friendly assistant embedded on a personal website. Keep replies concise and warm.',
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text);
+    const reply = textBlocks.join('\\n') || 'Sorry, I had trouble responding.';
+    pending.remove();
+    addMsg(reply, 'ai');
+    history.push({role:'assistant', content:reply});
+  }catch(e){
+    pending.remove();
+    addMsg('Something went wrong reaching the assistant.', 'ai');
+  }finally{
+    chatSend.disabled = false;
+  }
+}
+chatSend.addEventListener('click', sendChat);
+chatText.addEventListener('keydown', e => { if(e.key === 'Enter') sendChat(); });
+</script>
+</body>
+</html>
